@@ -18,7 +18,7 @@ Timer = vape.Categories.Blatant:CreateModule({
 })
 Value = Timer:CreateSlider({
 	Name = 'Value',
-	Min = 1,
+	Min = 0,
 	Max = 3,
 	Decimal = 10
 })
