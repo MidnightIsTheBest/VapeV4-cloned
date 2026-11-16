@@ -1,3 +1,5 @@
+-- Requiem: Killaura (fork of Vape V4 Killaura)
+-- Added animation modes: 'Block' and 'Block Spin' (see REQUIEM section below)
 local Attacking
 run(function()
 	local Killaura
@@ -31,6 +33,25 @@ run(function()
 	task.spawn(function()
 		AttackRemote = bedwars.Client:Get(remotes.AttackEntity).instance
 	end)
+
+	-- REQUIEM: block pose + block spin animations
+	-- Tweak these two CFrames if the pose looks off on your viewmodel.
+	-- BlockPose  = sword held across the body (like blocking in Minecraft)
+	-- BlockPress = the same pose pushed further down
+	local BlockPose = CFrame.new(0.69, -0.7, 0.6) * CFrame.Angles(math.rad(-30), math.rad(50), math.rad(-90))
+	local BlockPress = CFrame.new(0.69, -1.05, 0.55) * CFrame.Angles(math.rad(-48), math.rad(50), math.rad(-90))
+	anims.Block = {
+		{CFrame = BlockPose, Time = 0.08},
+		{CFrame = BlockPress, Time = 0.1},
+		{CFrame = BlockPress, Time = 0.12}
+	}
+	-- Same pushed-down block pose, but the sword spins around itself while you swing
+	anims['Block Spin'] = {
+		{CFrame = BlockPress * CFrame.Angles(0, math.rad(90), 0), Time = 0.06},
+		{CFrame = BlockPress * CFrame.Angles(0, math.rad(180), 0), Time = 0.06},
+		{CFrame = BlockPress * CFrame.Angles(0, math.rad(270), 0), Time = 0.06},
+		{CFrame = BlockPress * CFrame.Angles(0, math.rad(360), 0), Time = 0.06}
+	}
 
 	local function getAttackData()
 		if Mouse.Enabled then
@@ -151,7 +172,7 @@ run(function()
 									Entity = v,
 									Check = delta.Magnitude > AttackRange.Value and BoxSwingColor or BoxAttackColor
 								})
-								targetinfo.Targets[v] = tick() + 1
+								targetinfo.Targets[v] = os.clock() + 1
 
 								if not Attacking then
 									Attacking = true
